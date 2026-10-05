@@ -18,5 +18,22 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(10, activation="softmax")
 ])
 
-# Display model structure
-model.summary()
+# Compile the model
+model.compile(
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+# Train the model
+history = model.fit(
+    x_train,
+    y_train,
+    epochs=5,
+    validation_split=0.1
+)
+
+# Evaluate on test data
+test_loss, test_accuracy = model.evaluate(x_test, y_test)
+
+print("Test Accuracy:", test_accuracy)
