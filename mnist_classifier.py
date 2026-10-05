@@ -1,5 +1,6 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Load MNIST dataset
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -33,7 +34,44 @@ history = model.fit(
     validation_split=0.1
 )
 
-# Evaluate on test data
+# Evaluate the model
 test_loss, test_accuracy = model.evaluate(x_test, y_test)
 
 print("Test Accuracy:", test_accuracy)
+
+# Plot training and validation accuracy
+plt.plot(history.history["accuracy"], label="Training Accuracy")
+plt.plot(history.history["val_accuracy"], label="Validation Accuracy")
+
+plt.xlabel("Epoch")
+plt.ylabel("Accuracy")
+plt.title("Training vs Validation Accuracy")
+plt.legend()
+
+plt.savefig("training_curve.png")
+plt.show()
+
+# Make predictions
+predictions = model.predict(x_test)
+predicted_labels = np.argmax(predictions, axis=1)
+
+# Find misclassified images
+wrong_predictions = np.where(predicted_labels != y_test)[0]
+
+print("Number of misclassified images:", len(wrong_predictions))
+
+# Display some misclassified digits
+plt.figure(figsize=(10, 5))
+
+for i in range(10):
+    index = wrong_predictions[i]
+
+    plt.subplot(2, 5, i + 1)
+    plt.imshow(x_test[index], cmap="gray")
+    plt.title(
+        f"Actual: {y_test[index]}\nPredicted: {predicted_labels[index]}"
+    )
+    plt.axis("off")
+
+plt.tight_layout()
+plt.show()
