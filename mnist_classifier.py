@@ -15,7 +15,7 @@ x_test = x_test / 255.0
 # Build the neural network
 model = tf.keras.Sequential([
     tf.keras.layers.Flatten(input_shape=(28, 28)),
-    tf.keras.layers.Dense(128, activation="relu"),
+    tf.keras.layers.Dense(256, activation="relu"),
     tf.keras.layers.Dense(10, activation="softmax")
 ])
 
@@ -30,7 +30,7 @@ model.compile(
 history = model.fit(
     x_train,
     y_train,
-    epochs=5,
+    epochs=10,
     validation_split=0.1
 )
 
@@ -75,3 +75,4 @@ for i in range(10):
 
 plt.tight_layout()
 plt.show()
+print("Correct predictions:", np.sum(predicted_labels == y_test))
